@@ -1,0 +1,19 @@
+# ============================================================
+# Project definition. uv reads this file.
+#
+#   uv sync        install everything listed below, exactly
+#   uv run main.py run the agent inside the project environment
+#   uv add <pkg>   add a dependency (updates this file for you)
+#
+# This replaces requirements.txt AND the venv/activate dance:
+# dependencies, Python version and project metadata in one place.
+# ============================================================
+[project]
+name = "radar-triage-agent"
+version = "0.1.0"
+description = "Week 2 Day 2 — a Stripe Radar fraud-triage assistant, built with Strands, in six blocks"
+requires-python = ">=3.10"
+dependencies = [
+    "strands-agents[litellm]>=1.0",  # the agent SDK — gives us Blocks 2 and 3 plus the loop
+    "python-dotenv>=1.0",            # loads .env into the environment
+]
