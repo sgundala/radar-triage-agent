@@ -59,7 +59,17 @@ def run_triage() -> None:
             continue
 
         # One line of ours. A whole agentic loop of theirs.
-        result = agent(user_msg)
+        try:
+            result = agent(user_msg)
+        except Exception as e:
+            # A bad turn should not kill the session. The model may have run
+            # out of tokens mid-tool-call (common with small local models),
+            # or the provider may have returned an error. Strands has already
+            # kept the partial exchange in history, so the analyst can simply
+            # ask again and the loop continues from where it stopped.
+            print(f"\n[turn failed] {type(e).__name__}: {str(e)[:300]}")
+            print("Try rephrasing, or ask a smaller question.\n")
+            continue
 
         print(f"\nAssistant: {result}\n")
 

@@ -55,7 +55,11 @@ if USE_LOCAL_LLM:
     model = LiteLLMModel(
         client_args={"api_base": _ollama_url},          # no api_key needed locally
         model_id=f"ollama_chat/{_local_model}",          # "ollama_chat/" = LiteLLM's Ollama chat route
-        params={"temperature": 0.2, "max_tokens": 700},  # same dials as the cloud path
+        # max_tokens is HIGHER here on purpose. Small local models narrate
+        # ("Step 1: let's list the payments...") before they call a tool. At
+        # 700 the tool-call JSON gets cut off mid-write, Strands raises
+        # MaxTokensReachedException, and the turn dies. 2000 leaves room.
+        params={"temperature": 0.2, "max_tokens": 2000},
     )
     print(f"[inference] LOCAL model via Ollama: {_local_model} @ {_ollama_url}")
 
